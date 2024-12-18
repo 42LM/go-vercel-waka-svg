@@ -1,13 +1,15 @@
 # go-vercel-waka-svg
 Create an SVG with dynamic content from [Wakatime](https://wakatime.com/) with a [Vercel](https://vercel.com/) serverless function that generates an SVG image containing the last 7 days of your WakaTime coding activity.
 
+![wakatime/last_7_days stats](https://go-vercel-waka-svg.vercel.app/api?type=waka)
+
 ## Use in markdown
 ```
-![]()
+![Alt text](https://go-vercel-waka-svg.vercel.app/api?type=waka)
 ```
 or
 ```
-<img src="">
+<img src="https://go-vercel-waka-svg.vercel.app/api?type=waka">
 ```
 
 ## Local development

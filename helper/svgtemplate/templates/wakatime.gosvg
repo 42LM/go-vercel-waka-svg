@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 330">
+  <defs>
+    <style>
+      :root {
+        --bg-color: #FFF;
+        --text-color: #495054;
+        --stroke-color: #495054;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-color: #000;
+          --text-color: #CCC;
+          --stroke-color: #CCC;
+        }
+      }
+
+      rect {
+        fill: var(--bg-color);
+        stroke: var(--stroke-color);
+      }
+      line {
+        stroke: var(--stroke-color);
+      }
+
+      text {
+        fill: var(--text-color);
+      }
+    </style>
+  </defs>
+
+  <!-- canvas -->
+  <g>
+    <rect x="0" y="0" width="100%" height="100%" stroke-width="1" />
+  </g>
+
+  <!-- fancy inner outlines -->
+  <g>
+    <!-- top right -->
+    <text x="915" y="47" text-anchor="end" font-family="Menlo, Consolas, Courier New, monospace" font-size="1.5rem">=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=</text>
+    <line x1="912" y1="46" x2="912" y2="287" stroke-width="2" stroke-dasharray="20, 2" />
+    <!-- bottom left -->
+    <text x="915" y="300" text-anchor="end" font-family="Menlo, Consolas, Courier New, monospace" font-size="1.5rem">=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=</text>
+    <line x1="36" y1="46" x2="36" y2="287" stroke-width="2" stroke-dasharray="20, 2" />
+  </g>
+
+  <!-- dynamic text -->
+  <g>
+    {{range .}}
+    <g>
+      <!-- programming language -->
+      <text x="70" y="{{.Y}}" text-anchor="start" font-family="Menlo, Consolas, Courier New, monospace" font-size="1.25rem">{{.Language}}</text>
+      <!-- time in hrs mins -->
+      <text x="240" y="{{.Y}}" text-anchor="start" font-family="Menlo, Consolas, Courier New, monospace" font-size="1.25rem">{{.Time}}</text>
+      <!-- bar with percentage -->
+      <text x="870" y="{{.Y}}" text-anchor="end" font-family="Menlo, Consolas, Courier New, monospace" font-size="1.25rem">{{.Bar}} {{.Percent}}</text>
+    </g>
+    {{end}}
+  </g>
+</svg>

@@ -47,3 +47,6 @@ Deploy to production:
 ```
 vercel --prod
 ```
+
+> [!IMPORTANT]
+> Do not forget to set the env var of your github token in vercel!

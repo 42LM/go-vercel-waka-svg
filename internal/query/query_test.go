@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"go-vercel-waka-svg/helper/query"
+	"go-vercel-waka-svg/internal/query"
 )
 
 func Test_GetQueryParams(t *testing.T) {

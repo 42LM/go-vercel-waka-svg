@@ -128,7 +128,7 @@ func (s *service) Wakatime(ctx context.Context) error {
 		}
 	}
 
-	other.Language = "Other what"
+	other.Language = "Other"
 
 	// produce time text
 	otherTime := ""
@@ -158,8 +158,6 @@ func (s *service) Wakatime(ctx context.Context) error {
 
 	other.Percent = fmt.Sprintf("%05.2f %%", tmpPercent)
 	wakaT[4] = other
-
-	fmt.Printf("\n\n%#v\n\n", wakaT)
 
 	return s.templates.ExecuteTemplate(s.responseWriter, "wakatime.gosvg", wakaT)
 }

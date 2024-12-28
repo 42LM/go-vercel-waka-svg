@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 
-	"go-vercel-waka-svg/nointeral/query"
-	"go-vercel-waka-svg/nointeral/service"
-	"go-vercel-waka-svg/nointeral/svgtemplate"
+	"go-vercel-waka-svg/helper/query"
+	"go-vercel-waka-svg/helper/service"
+	"go-vercel-waka-svg/helper/svgtemplate"
 )
 
 // GenerateSVG is the single handler being triggered by vercel.

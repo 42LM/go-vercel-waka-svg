@@ -72,23 +72,33 @@ func (s *service) Wakatime(ctx context.Context) error {
 		return err
 	}
 
+	yCount := 90
+	yCountAddidtion := 40
+	// loop through all languages and check if it contains `Other`
+	// set a different Ycount when that is the case
 	var specialI *int
+	for i, l := range wakaResp.Data.Languages {
+		if l.Name == "Other" {
+			specialI = &i
+			yCountAddidtion = 55
+			break
+		}
+	}
+
 	// get the top 4 programming languages
 	wakaT := make([]WakaTimeInput, 5)
-	yCount := 90
 	for i, l := range wakaResp.Data.Languages {
 		if i == 4 {
 			break
 		}
 		if l.Name == "Other" {
-			specialI = &i
 			continue
 		}
 
 		bar := calcBar(l.Percent)
 
 		if i > 0 {
-			yCount += 40
+			yCount += yCountAddidtion
 		}
 
 		wakaT[i] = WakaTimeInput{
@@ -140,7 +150,7 @@ func (s *service) Wakatime(ctx context.Context) error {
 
 	other.Time = otherTime
 	other.Percent = fmt.Sprintf("%05.2f %%", tmpPercent)
-	other.Y = yCount + 40
+	other.Y = yCount + yCountAddidtion
 
 	if specialI != nil {
 		tmpPercent += wakaResp.Data.Languages[*specialI].Percent
@@ -148,6 +158,8 @@ func (s *service) Wakatime(ctx context.Context) error {
 
 	other.Percent = fmt.Sprintf("%05.2f %%", tmpPercent)
 	wakaT[4] = other
+
+	fmt.Printf("\n\n%#v\n\n", wakaT)
 
 	return s.templates.ExecuteTemplate(s.responseWriter, "wakatime.gosvg", wakaT)
 }

@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"go-vercel-waka-svg/internal/service"
-	"go-vercel-waka-svg/internal/svgtemplate"
+	"go-vercel-waka-svg/nointeral/service"
+	"go-vercel-waka-svg/nointeral/svgtemplate"
 )
 
 func Test_Service_Error(t *testing.T) {

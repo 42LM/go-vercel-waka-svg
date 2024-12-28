@@ -72,16 +72,17 @@ func (s *service) Wakatime(ctx context.Context) error {
 		return err
 	}
 
-	other := false
+	var specialI *int
 	// get the top 4 programming languages
 	wakaT := make([]WakaTimeInput, 5)
 	yCount := 90
 	for i, l := range wakaResp.Data.Languages {
-		if l.Name == "Other" {
-			other = true
-		}
 		if i == 4 {
 			break
+		}
+		if l.Name == "Other" {
+			specialI = &i
+			continue
 		}
 
 		bar := calcBar(l.Percent)
@@ -99,50 +100,54 @@ func (s *service) Wakatime(ctx context.Context) error {
 		}
 	}
 
-	if !other {
-		// calculate all the rest
-		other := WakaTimeInput{}
-		var tmpPercent float64
-		var tmpHours int
-		var tmpMinutes int
-		for i := 4; i < len(wakaResp.Data.Languages); i++ {
-			l := wakaResp.Data.Languages[i]
+	// calculate all the rest
+	other := WakaTimeInput{}
+	var tmpPercent float64
+	var tmpHours int
+	var tmpMinutes int
+	for i := 4; i < len(wakaResp.Data.Languages); i++ {
+		l := wakaResp.Data.Languages[i]
 
-			tmpPercent += l.Percent
-			tmpHours += l.Hours
-			tmpMinutes += l.Minutes
+		tmpPercent += l.Percent
+		tmpHours += l.Hours
+		tmpMinutes += l.Minutes
 
-			if len(wakaResp.Data.Languages)-1 == i {
-				bar := calcBar(tmpPercent)
-				other.Bar = bar
-			}
+		if len(wakaResp.Data.Languages)-1 == i {
+			bar := calcBar(tmpPercent)
+			other.Bar = bar
 		}
-
-		other.Language = "Other"
-
-		// produce time text
-		otherTime := ""
-		hours, remainingMinutes := convertMinutesToHours(tmpMinutes)
-		tmpHours += hours
-		tmpMinutes = remainingMinutes
-
-		if tmpHours > 0 && tmpMinutes != 0 {
-			if tmpHours == 1 {
-				otherTime = fmt.Sprintf("%d hr %d mins", tmpHours, tmpMinutes)
-			} else {
-				otherTime = fmt.Sprintf("%d hrs %d mins", tmpHours, tmpMinutes)
-			}
-		} else if tmpHours == 0 && tmpMinutes == 0 {
-			otherTime = "0 secs"
-		} else {
-			otherTime = fmt.Sprintf("%d mins", tmpMinutes)
-		}
-
-		other.Time = otherTime
-		other.Percent = fmt.Sprintf("%05.2f %%", tmpPercent)
-		other.Y = yCount + 40
-		wakaT[4] = other
 	}
+
+	other.Language = "Other what"
+
+	// produce time text
+	otherTime := ""
+	hours, remainingMinutes := convertMinutesToHours(tmpMinutes)
+	tmpHours += hours
+	tmpMinutes = remainingMinutes
+
+	if tmpHours > 0 && tmpMinutes != 0 {
+		if tmpHours == 1 {
+			otherTime = fmt.Sprintf("%d hr %d mins", tmpHours, tmpMinutes)
+		} else {
+			otherTime = fmt.Sprintf("%d hrs %d mins", tmpHours, tmpMinutes)
+		}
+	} else if tmpHours == 0 && tmpMinutes == 0 {
+		otherTime = "0 secs"
+	} else {
+		otherTime = fmt.Sprintf("%d mins", tmpMinutes)
+	}
+
+	other.Time = otherTime
+	other.Percent = fmt.Sprintf("%05.2f %%", tmpPercent)
+	other.Y = yCount + 40
+
+	if specialI != nil {
+		tmpPercent += wakaResp.Data.Languages[*specialI].Percent
+	}
+
+	other.Percent = fmt.Sprintf("%05.2f %%", tmpPercent)
+	wakaT[4] = other
 
 	return s.templates.ExecuteTemplate(s.responseWriter, "wakatime.gosvg", wakaT)
 }

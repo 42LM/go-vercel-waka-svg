@@ -77,11 +77,10 @@ func (s *service) Wakatime(ctx context.Context) error {
 	// loop through all languages and check if it contains `Other`
 	// set a different Ycount when that is the case
 	var specialI *int
-	for i, l := range wakaResp.Data.Languages {
-		if l.Name == "Other" {
+	for i := 0; i < 5; i++ {
+		if wakaResp.Data.Languages[i].Name == "Other" {
 			specialI = &i
 			yCountAddidtion = 55
-			break
 		}
 	}
 

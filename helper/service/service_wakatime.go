@@ -74,15 +74,18 @@ func (s *service) Wakatime(ctx context.Context) error {
 
 	yCount := 90
 	yCountAddidtion := 40
-	// loop through all languages and check if it contains `Other`
+	// loop through the first 4 languages and check if it contains `Other`
 	// set a different Ycount when that is the case
+	fmt.Println("Languages:", wakaResp.Data.Languages)
 	var specialI *int
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 4; i++ {
 		if wakaResp.Data.Languages[i].Name == "Other" {
 			specialI = &i
 			yCountAddidtion = 55
 		}
 	}
+
+	fmt.Println(yCountAddidtion)
 
 	// get the top 4 programming languages
 	wakaT := make([]WakaTimeInput, 5)
@@ -152,7 +155,9 @@ func (s *service) Wakatime(ctx context.Context) error {
 	other.Y = yCount + yCountAddidtion
 
 	if specialI != nil {
-		tmpPercent += wakaResp.Data.Languages[*specialI].Percent
+		if *specialI != 4 {
+			tmpPercent += wakaResp.Data.Languages[*specialI].Percent
+		}
 	}
 
 	other.Percent = fmt.Sprintf("%05.2f %%", tmpPercent)

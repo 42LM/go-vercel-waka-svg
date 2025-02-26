@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log/slog"
 	"math"
 	"net/http"
 	"os"
@@ -76,7 +77,15 @@ func (s *service) Wakatime(ctx context.Context) error {
 	yCountAddidtion := 40
 	// loop through the first 4 languages and check if it contains `Other`
 	// set a different Ycount when that is the case
-	fmt.Println("Languages:", wakaResp.Data.Languages)
+	if len(wakaResp.Data.Languages) == 0 {
+		slog.Error("ERROR",
+			"error", "empty languages in waka response",
+			"wakaResp.Data.Lanugages", wakaResp.Data.Languages,
+			"wakaResp.Data", wakaResp.Data,
+		)
+		return s.templates.ExecuteTemplate(s.responseWriter, "error.gosvg", nil)
+	}
+
 	var specialI *int
 	for i := 0; i < 4; i++ {
 		if wakaResp.Data.Languages[i].Name == "Other" {
@@ -84,8 +93,6 @@ func (s *service) Wakatime(ctx context.Context) error {
 			yCountAddidtion = 55
 		}
 	}
-
-	fmt.Println(yCountAddidtion)
 
 	// get the top 4 programming languages
 	wakaT := make([]WakaTimeInput, 5)

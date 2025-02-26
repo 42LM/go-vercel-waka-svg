@@ -7,15 +7,6 @@ Success (good query):
 Error (bad query):  
 ![wakatime/last_7_days stats](https://go-vercel-waka-svg.vercel.app/api?type=whattype)
 
-## Use in markdown
-```
-![Alt text](https://go-vercel-waka-svg.vercel.app/api?type=waka)
-```
-or
-```
-<img src="https://go-vercel-waka-svg.vercel.app/api?type=waka">
-```
-
 ## Local development
 First of all make sure the env variable `WAKA_API_KEY` is set.
 ```
@@ -50,3 +41,12 @@ vercel --prod
 
 > [!IMPORTANT]
 > Do not forget to set the env var of your github token in vercel!
+
+## Use in markdown
+```
+![Alt text](https://go-vercel-waka-svg.vercel.app/api?type=waka)
+```
+or
+```
+<img src="https://go-vercel-waka-svg.vercel.app/api?type=waka">
+```
